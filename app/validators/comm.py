@@ -27,3 +27,7 @@ class CommForm(Form):
 
 class PutCommForm(CommForm):
     id = IntegerField("商品id", validators=[DataRequired(message="商品id不能为空")])
+
+
+class CommName(Form):
+    name = StringField("商品名称", validators=[DataRequired(message="商品名称不能为空")])

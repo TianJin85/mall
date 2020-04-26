@@ -8,7 +8,7 @@
 """
 from lin.exception import NotFound, ParameterException
 from lin.interface import InfoCrud as Base
-from sqlalchemy import Column, String, Integer, Float, ForeignKey, Boolean, Text
+from sqlalchemy import Column, String, Integer, Float, ForeignKey, Boolean, Text, and_
 
 from app.config.setting import BaseConfig
 
@@ -65,7 +65,6 @@ class Commodity(Base):
             )
             return True
 
-
     @classmethod
     def query_comm(cls, pageNumber):
         """
@@ -105,6 +104,19 @@ class Commodity(Base):
             raise NotFound(msg='没有找到相关商品')
         else:
             return comm
+
+    @classmethod
+    def query_comm_lick(cls, name):
+        name = "%"+name+"%"
+
+        comm = Commodity.query.filter(Commodity.name.like(name)).all()
+        return comm
+
+    @classmethod
+    def query_comm_type(cls, _type):
+        comm = Commodity.query.filter_by(type=_type, delete_time=None).all()
+
+        return comm
 
 
 # class ProductModel(Base):

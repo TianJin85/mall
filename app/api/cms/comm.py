@@ -14,7 +14,7 @@ from werkzeug.datastructures import ImmutableMultiDict
 
 from app.exception.exception import Success, Result, ListResult
 from app.models.comm import Commodity
-from app.validators.comm import CommForm, PutCommForm
+from app.validators.comm import CommForm, PutCommForm, CommName
 
 comm_api = Redprint('admin')
 
@@ -112,6 +112,38 @@ def query_comm_details():
         return Result(data=comm)
     else:
         return ParameterException(msg="请传入商品id")
+
+
+@comm_api.route('/query_comm_lick', methods=["GET"])
+def query_comm_lick():
+    name = request.args["name"]
+    if name:
+        comm = Commodity.query_comm_lick(name=name)
+        for item in comm:
+
+            setattr(item, "product", eval(getattr(item, "product")))
+
+            setattr(item, "titleImg", eval(getattr(item, "titleImg")))
+        return Result(data=comm)
+    else:
+        return ParameterException(msg="请传入商品名称")
+
+
+@comm_api.route('/query_class', methods=["GET"])
+def query_class():
+    _type = request.args["type"]
+    if _type:
+        comm = Commodity.query_comm_type(_type=_type)
+        for item in comm:
+            setattr(item, "product", eval(getattr(item, "product")))
+            setattr(item, "titleImg", eval(getattr(item, "titleImg")))
+        return comm
+    else:
+        return ParameterException(msg="请传入商品类型")
+
+
+
+
 
 
 
